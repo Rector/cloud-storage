@@ -1,6 +1,7 @@
 package ru.kir.server.gui;
 
 import ru.kir.server.core.ServerCore;
+import ru.kir.server.core.ServerWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,17 +16,20 @@ public class ServerGUI extends JFrame implements ActionListener {
     private final String WINDOW_TITLE = "Server Cloud Storage";
 
     private final ServerCore SERVER_CORE = new ServerCore();
+    private final ServerWatch SERVER_WATCH = new ServerWatch();
 
     private final JButton BTN_START = new JButton("Start");
     private final JButton BTN_STOP = new JButton("Stop");
-    private final JPanel PANEL = new JPanel(new GridLayout(1,2));
+    private final JPanel PANEL = new JPanel(new GridLayout(1, 2));
     private final JTextArea LOG_AREA = new JTextArea();
 
-/**
- * Настраивааются параметры графического интерфейса сервера
- * */
+    /**
+     * Настраивааются параметры графического интерфейса сервера
+     */
 
-    private ServerGUI(){
+    private ServerGUI() {
+        new Thread(SERVER_WATCH::watchPackage).start();
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(POS_X, POS_Y, WIDTH, HEIGHT);
         setResizable(false);
@@ -48,26 +52,28 @@ public class ServerGUI extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(ServerGUI::new);
     }
 
-/**
- * Задаётся поведение сервера при нажатии на кнопки графического интерфейса
- * */
+    /**
+     * Задаётся поведение сервера при нажатии на кнопки графического интерфейса
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object action = e.getSource();
-        if(action == BTN_START){
+        if (action.equals(BTN_START)) {
             System.out.println("Server started");
+            new Thread(SERVER_WATCH::watchPackage).start();
             SERVER_CORE.start();
         }
 
-        if(action == BTN_STOP){
+        if (action.equals(BTN_STOP)) {
             System.out.println("Server stopped");
+            SERVER_WATCH.setCheckIsActive(false);
             SERVER_CORE.stop();
         }
-
     }
+
 }
