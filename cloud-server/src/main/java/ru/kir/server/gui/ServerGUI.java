@@ -28,19 +28,17 @@ public class ServerGUI extends JFrame implements ActionListener {
      */
 
     private ServerGUI() {
-        new Thread(SERVER_WATCH::watchPackage).start();
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(POS_X, POS_Y, WIDTH, HEIGHT);
         setResizable(false);
         setTitle(WINDOW_TITLE);
 
-// todo: подумать, нужно ли, чтобы окно сервера было всегда поверх других окон
-//        setAlwaysOnTop(true);
+        setAlwaysOnTop(true);
 
         LOG_AREA.setEditable(false);
         LOG_AREA.setLineWrap(true);
         JScrollPane scrollLogArea = new JScrollPane(LOG_AREA);
+
         BTN_START.addActionListener(this);
         BTN_STOP.addActionListener(this);
 
@@ -67,9 +65,7 @@ public class ServerGUI extends JFrame implements ActionListener {
             System.out.println("Server started");
             new Thread(SERVER_WATCH::watchPackage).start();
             SERVER_CORE.start();
-        }
-
-        if (action.equals(BTN_STOP)) {
+        } else if (action.equals(BTN_STOP)) {
             System.out.println("Server stopped");
             SERVER_WATCH.setCheckIsActive(false);
             SERVER_CORE.stop();

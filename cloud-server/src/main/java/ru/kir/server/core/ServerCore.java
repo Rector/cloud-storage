@@ -6,8 +6,13 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import ru.kir.server.decoders.ServerFileDecoder;
-import ru.kir.server.decoders.ServerLoginDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
+import ru.kir.server.WorkWithDB;
+import ru.kir.server.handlers.ServerUploadFileHandler;
+import ru.kir.server.decoders_and_encoders.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,8 +20,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 
+import static ru.kir.utils.ParametersForFileTransfer.*;
+
 public class ServerCore {
-    private Connection connection;
     private Statement statement;
 
     private NioEventLoopGroup bossGroup;
@@ -27,23 +33,6 @@ public class ServerCore {
 
     private boolean checkStartServer = false;
 
-    private void openConnectionDB() {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:users.db");
-            statement = connection.createStatement();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeConnectionDB() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Создание директории каждому пользователю
@@ -72,7 +61,7 @@ public class ServerCore {
         if (!checkStartServer) {
             checkStartServer = true;
 
-            openConnectionDB();
+            statement = WorkWithDB.getStatement();
             createDirectories();
 
             try {
@@ -85,9 +74,20 @@ public class ServerCore {
                         .childHandler(new ChannelInitializer<SocketChannel>() {
                             @Override
                             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                                socketChannel.pipeline().addLast(new ServerLoginDecoder(), new ServerFileDecoder());
+                                socketChannel.pipeline().addLast(
+                                        new LengthFieldBasedFrameDecoder(MAX_FRAME_LENGTHS, LENGTH_FIELD_OFFSET, LENGTH_FIELD_LENGTHS, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP),
+                                        new LengthFieldPrepender(LENGTH_FIELD_LENGTHS),
+                                        new ByteArrayDecoder(),
+                                        new ByteArrayEncoder(),
+                                        new ServerUploadJsonDecoder(),
+                                        new ServerUploadJsonEncoder(),
+                                        new ServerUploadFileHandler()
+//                                        new ServerDownloadJsonDecoder(),
+//                                        new ServerDownloadFileHandler()
+                                );
                             }
                         });
+
                 ChannelFuture channelFuture = serverBootstrap.bind(PORT).sync();
 
                 channelFuture.channel().closeFuture().sync();
@@ -109,7 +109,7 @@ public class ServerCore {
         if (checkStartServer) {
             bossGroup.shutdownGracefully();
             workingGroup.shutdownGracefully();
-            closeConnectionDB();
+            WorkWithDB.closeConnectionDB();
             checkStartServer = false;
         }
     }
