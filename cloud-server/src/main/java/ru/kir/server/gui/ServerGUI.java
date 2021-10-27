@@ -1,7 +1,6 @@
 package ru.kir.server.gui;
 
 import ru.kir.server.core.ServerCore;
-import ru.kir.server.core.ServerWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +15,6 @@ public class ServerGUI extends JFrame implements ActionListener {
     private final String WINDOW_TITLE = "Server Cloud Storage";
 
     private final ServerCore SERVER_CORE = new ServerCore();
-    private final ServerWatch SERVER_WATCH = new ServerWatch();
 
     private final JButton BTN_START = new JButton("Start");
     private final JButton BTN_STOP = new JButton("Stop");
@@ -24,7 +22,7 @@ public class ServerGUI extends JFrame implements ActionListener {
     private final JTextArea LOG_AREA = new JTextArea();
 
     /**
-     * Настраивааются параметры графического интерфейса сервера
+     * Настраиваются параметры графического интерфейса сервера
      */
 
     private ServerGUI() {
@@ -63,11 +61,9 @@ public class ServerGUI extends JFrame implements ActionListener {
         Object action = e.getSource();
         if (action.equals(BTN_START)) {
             System.out.println("Server started");
-            new Thread(SERVER_WATCH::watchPackage).start();
             SERVER_CORE.start();
         } else if (action.equals(BTN_STOP)) {
             System.out.println("Server stopped");
-            SERVER_WATCH.setCheckIsActive(false);
             SERVER_CORE.stop();
         }
     }

@@ -1,4 +1,4 @@
-package ru.kir.server.decoders_and_encoders;
+package ru.kir.utils.decoders_and_encoders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,7 +7,7 @@ import ru.kir.utils.dto.FullFileDto;
 
 import java.util.List;
 
-public class ServerUploadJsonEncoder extends MessageToMessageEncoder<FullFileDto> {
+public class ClientUploadJsonEncoder extends MessageToMessageEncoder<FullFileDto> {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -15,4 +15,5 @@ public class ServerUploadJsonEncoder extends MessageToMessageEncoder<FullFileDto
         byte[] bytes = objectMapper.writeValueAsBytes(fullFileDto);
         out.add(bytes);
     }
+
 }

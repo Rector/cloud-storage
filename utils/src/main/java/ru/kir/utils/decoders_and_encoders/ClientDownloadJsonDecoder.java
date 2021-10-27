@@ -1,18 +1,19 @@
-package ru.kir.server.decoders_and_encoders;
+package ru.kir.utils.decoders_and_encoders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import ru.kir.utils.dto.FileNameDto;
+import ru.kir.utils.dto.FullFileDto;
 
 import java.util.List;
 
-public class ServerUploadJsonDecoder extends MessageToMessageDecoder<byte[]> {
+public class ClientDownloadJsonDecoder extends MessageToMessageDecoder<byte[]> {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     protected void decode(ChannelHandlerContext ctx, byte[] file, List<Object> out) throws Exception {
-        FileNameDto fileNameDto = objectMapper.readValue(file, FileNameDto.class);
-        out.add(fileNameDto);
+        FullFileDto fullFileDto = objectMapper.readValue(file, FullFileDto.class);
+        out.add(fullFileDto);
     }
+
 }

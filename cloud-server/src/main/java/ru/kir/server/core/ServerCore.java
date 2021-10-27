@@ -11,8 +11,9 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import ru.kir.server.WorkWithDB;
-import ru.kir.server.handlers.ServerUploadFileHandler;
-import ru.kir.server.decoders_and_encoders.*;
+import ru.kir.server.handlers.ServerDownloadFileHandler;
+import ru.kir.utils.decoders_and_encoders.ServerDownloadJsonDecoder;
+import ru.kir.utils.decoders_and_encoders.ServerDownloadJsonEncoder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +44,7 @@ public class ServerCore {
             Path path = null;
             ResultSet resultSet = statement.executeQuery("SELECT login_fld FROM users_tbl");
             while (resultSet.next()) {
-                path = Paths.get("D:/JavaProject/cloud-storage/cloud-server/src/main/resources/client_files/" + resultSet.getString("login_fld").toLowerCase());
+                path = Paths.get("./cloud-server/src/main/resources/client_files/" + resultSet.getString("login_fld").toLowerCase());
                 if (!Files.isDirectory(path)) {
                     Files.createDirectory(path);
                 }
@@ -79,11 +80,11 @@ public class ServerCore {
                                         new LengthFieldPrepender(LENGTH_FIELD_LENGTHS),
                                         new ByteArrayDecoder(),
                                         new ByteArrayEncoder(),
-                                        new ServerUploadJsonDecoder(),
-                                        new ServerUploadJsonEncoder(),
-                                        new ServerUploadFileHandler()
-//                                        new ServerDownloadJsonDecoder(),
-//                                        new ServerDownloadFileHandler()
+                                        new ServerDownloadJsonDecoder(),
+                                        new ServerDownloadJsonEncoder(),
+                                        new ServerDownloadFileHandler()
+//                                        new ServerUploadJsonDecoder(),
+//                                        new ServerUploadFileHandler()
                                 );
                             }
                         });

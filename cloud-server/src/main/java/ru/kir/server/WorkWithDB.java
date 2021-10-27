@@ -12,7 +12,7 @@ public class WorkWithDB {
     private static void openConnectionDB() {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:users.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:cloud-server/users.db");
             statement = connection.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

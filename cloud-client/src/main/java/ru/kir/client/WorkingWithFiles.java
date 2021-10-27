@@ -10,8 +10,10 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
-import ru.kir.client.decoders_and_encoders.*;
 import ru.kir.client.handlers.ClientDownloadFileHandler;
+import ru.kir.utils.decoders_and_encoders.ClientDownloadJsonDecoder;
+import ru.kir.utils.decoders_and_encoders.ClientDownloadJsonEncoder;
+import ru.kir.utils.decoders_and_encoders.ClientUploadJsonEncoder;
 import ru.kir.utils.dto.FileNameDto;
 import ru.kir.utils.dto.FullFileDto;
 
@@ -22,6 +24,7 @@ import java.io.RandomAccessFile;
 import static ru.kir.utils.ParametersForFileTransfer.*;
 
 public class WorkingWithFiles {
+    private byte[] bigBuffer = new byte[MAX_FRAME_LENGTHS];
 
     /**
      * Скачивание файла с сервера
@@ -85,9 +88,6 @@ public class WorkingWithFiles {
                     });
 
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
-
-
-            byte[] bigBuffer = new byte[MAX_FRAME_LENGTHS];
 
             try (RandomAccessFile randomAccessFile = new RandomAccessFile(pathUploadFile, "r")) {
                 while (true) {

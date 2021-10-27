@@ -1,4 +1,4 @@
-package ru.kir.server.decoders_and_encoders;
+package ru.kir.utils.decoders_and_encoders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,7 +7,7 @@ import ru.kir.utils.dto.FullFileDto;
 
 import java.util.List;
 
-public class ServerDownloadJsonDecoder extends MessageToMessageDecoder<byte[]> {
+public class ServerUploadJsonDecoder extends MessageToMessageDecoder<byte[]> {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

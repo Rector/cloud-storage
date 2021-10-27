@@ -1,4 +1,4 @@
-package ru.kir.client.decoders_and_encoders;
+package ru.kir.utils.decoders_and_encoders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
