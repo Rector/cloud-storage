@@ -1,4 +1,4 @@
-package ru.kir.utils;
+package ru.kir.common;
 
 public class ParametersForFileTransfer {
     public static final int MAX_FRAME_LENGTHS = 1024 * 1024;

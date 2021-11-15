@@ -7,8 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static ru.kir.utils.ParametersForFileTransfer.PATH_DOWNLOAD_FILE;
-import static ru.kir.utils.ParametersForFileTransfer.PATH_UPLOAD_FILE;
+import static ru.kir.common.ParametersForFileTransfer.PATH_DOWNLOAD_FILE;
+import static ru.kir.common.ParametersForFileTransfer.PATH_UPLOAD_FILE;
 
 public class ClientGUI extends JFrame implements ActionListener {
     private final String HOST = "localhost";
@@ -84,9 +84,15 @@ public class ClientGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object action = e.getSource();
         if (action.equals(BTN_DOWNLOAD_FILE)) {
-            workingWithFiles.downloadFileFromServer(HOST, PORT, PATH_DOWNLOAD_FILE);
+            Thread downloadFileThread = new Thread(() -> {
+                workingWithFiles.downloadFileFromServer(HOST, PORT, PATH_DOWNLOAD_FILE);
+            });
+            downloadFileThread.start();
         } else if (action.equals(BTN_UPLOAD_FILE)) {
-            workingWithFiles.uploadFileToServer(HOST, PORT, PATH_UPLOAD_FILE);
+            Thread uploadFileThread = new Thread(() -> {
+                workingWithFiles.uploadFileToServer(HOST, PORT, PATH_UPLOAD_FILE);
+            });
+            uploadFileThread.start();
         } else if (action.equals(BTN_LOG_IN)) {
             PANEL_LOG_IN.setVisible(false);
             PANEL_LOGOUT.setVisible(true);

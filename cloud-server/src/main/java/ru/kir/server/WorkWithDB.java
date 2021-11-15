@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class WorkWithDB {
-    private static Connection connection;
-    private static Statement statement;
+    private Connection connection;
+    private Statement statement;
 
-    private static void openConnectionDB() {
+    private void openConnectionDB() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:cloud-server/users.db");
@@ -19,17 +19,18 @@ public class WorkWithDB {
         }
     }
 
-    public static void closeConnectionDB() {
+    public void closeConnectionDB() {
         if (connection != null) {
             try {
                 connection.close();
+                statement = null;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static Statement getStatement() {
+    public Statement getStatement() {
         if (statement == null) {
             openConnectionDB();
             return statement;

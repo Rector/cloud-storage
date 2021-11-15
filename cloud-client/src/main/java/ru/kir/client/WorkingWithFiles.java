@@ -11,17 +11,17 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import ru.kir.client.handlers.ClientDownloadFileHandler;
-import ru.kir.utils.decoders_and_encoders.ClientDownloadJsonDecoder;
-import ru.kir.utils.decoders_and_encoders.ClientDownloadJsonEncoder;
-import ru.kir.utils.decoders_and_encoders.ClientUploadJsonEncoder;
-import ru.kir.utils.dto.FileNameDto;
-import ru.kir.utils.dto.FullFileDto;
+import ru.kir.common.decoders_and_encoders.ClientDownloadJsonDecoder;
+import ru.kir.common.decoders_and_encoders.ClientDownloadJsonEncoder;
+import ru.kir.common.decoders_and_encoders.ClientUploadJsonEncoder;
+import ru.kir.common.dto.FileNameDto;
+import ru.kir.common.dto.FullFileDto;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import static ru.kir.utils.ParametersForFileTransfer.*;
+import static ru.kir.common.ParametersForFileTransfer.*;
 
 public class WorkingWithFiles {
     private byte[] bigBuffer = new byte[MAX_FRAME_LENGTHS];

@@ -2,11 +2,11 @@ package ru.kir.client.handlers;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import ru.kir.utils.dto.FullFileDto;
+import ru.kir.common.dto.FullFileDto;
 
 import java.io.RandomAccessFile;
 
-import static ru.kir.utils.ParametersForFileTransfer.SAVE_FILE_ON_CLIENT;
+import static ru.kir.common.ParametersForFileTransfer.SAVE_FILE_ON_CLIENT;
 
 public class ClientDownloadFileHandler extends SimpleChannelInboundHandler<FullFileDto> {
     @Override

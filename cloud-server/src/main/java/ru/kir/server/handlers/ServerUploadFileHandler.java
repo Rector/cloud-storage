@@ -2,7 +2,7 @@ package ru.kir.server.handlers;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import ru.kir.utils.dto.FullFileDto;
+import ru.kir.common.dto.FullFileDto;
 
 import java.io.RandomAccessFile;
 

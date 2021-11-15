@@ -12,7 +12,7 @@
     <modules>
         <module>cloud-server</module>
         <module>cloud-client</module>
-        <module>utils</module>
+        <module>common</module>
     </modules>
 
     <properties>

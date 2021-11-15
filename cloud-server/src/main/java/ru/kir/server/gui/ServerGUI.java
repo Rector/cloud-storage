@@ -14,7 +14,8 @@ public class ServerGUI extends JFrame implements ActionListener {
     private final int HEIGHT = 300;
     private final String WINDOW_TITLE = "Server Cloud Storage";
 
-    private final ServerCore SERVER_CORE = new ServerCore();
+    private ServerCore serverCore;
+
 
     private final JButton BTN_START = new JButton("Start");
     private final JButton BTN_STOP = new JButton("Stop");
@@ -60,11 +61,17 @@ public class ServerGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object action = e.getSource();
         if (action.equals(BTN_START)) {
-            System.out.println("Server started");
-            SERVER_CORE.start();
+            if(serverCore == null){
+                System.out.println("Server started");
+                serverCore = new ServerCore();
+                serverCore.start();
+            }
         } else if (action.equals(BTN_STOP)) {
-            System.out.println("Server stopped");
-            SERVER_CORE.stop();
+            if(serverCore != null && serverCore.isAlive()){
+                System.out.println("Server stopped");
+                serverCore.stopServer();
+                serverCore = null;
+            }
         }
     }
 

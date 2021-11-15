@@ -1,9 +1,9 @@
-package ru.kir.utils.decoders_and_encoders;
+package ru.kir.common.decoders_and_encoders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import ru.kir.utils.dto.FullFileDto;
+import ru.kir.common.dto.FullFileDto;
 
 import java.util.List;
 

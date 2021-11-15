@@ -10,10 +10,12 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
+import ru.kir.common.decoders_and_encoders.ServerDownloadJsonDecoder;
+import ru.kir.common.decoders_and_encoders.ServerDownloadJsonEncoder;
+import ru.kir.common.decoders_and_encoders.ServerUploadJsonDecoder;
 import ru.kir.server.WorkWithDB;
 import ru.kir.server.handlers.ServerDownloadFileHandler;
-import ru.kir.utils.decoders_and_encoders.ServerDownloadJsonDecoder;
-import ru.kir.utils.decoders_and_encoders.ServerDownloadJsonEncoder;
+import ru.kir.server.handlers.ServerUploadFileHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,9 +23,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 
-import static ru.kir.utils.ParametersForFileTransfer.*;
+import static ru.kir.common.ParametersForFileTransfer.*;
 
-public class ServerCore {
+public class ServerCore extends Thread {
+    private WorkWithDB workWithDB = new WorkWithDB();
     private Statement statement;
 
     private NioEventLoopGroup bossGroup;
@@ -31,8 +34,6 @@ public class ServerCore {
 
     private final String HOST = "localhost";
     private final int PORT = 8800;
-
-    private boolean checkStartServer = false;
 
 
     /**
@@ -55,14 +56,14 @@ public class ServerCore {
     }
 
     /**
-     * Устанавливается соединение с базой данных и сервер начинает "слушать" порт 8800 и ожидать приёма файла от клиента
+     * Устанавливается соединение с базой данных и сервер начинает "слушать" порт 8800 и ожидать загрузки или скачивания файла
      */
 
-    public void start() {
-        if (!checkStartServer) {
-            checkStartServer = true;
+    @Override
+    public void run() {
+            if (!isInterrupted()) {
 
-            statement = WorkWithDB.getStatement();
+            statement = workWithDB.getStatement();
             createDirectories();
 
             try {
@@ -106,12 +107,13 @@ public class ServerCore {
      * Предполагается закрытие потоков и завершение соединения с базой данных
      */
 
-    public void stop() {
-        if (checkStartServer) {
+    public void stopServer() {
+        if (isAlive()) {
             bossGroup.shutdownGracefully();
             workingGroup.shutdownGracefully();
-            WorkWithDB.closeConnectionDB();
-            checkStartServer = false;
+            workWithDB.closeConnectionDB();
+            statement = null;
+            interrupt();
         }
     }
 

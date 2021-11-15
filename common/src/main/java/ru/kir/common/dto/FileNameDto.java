@@ -1,4 +1,4 @@
-package ru.kir.utils.dto;
+package ru.kir.common.dto;
 
 import lombok.Data;
 
