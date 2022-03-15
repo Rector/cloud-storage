@@ -62,13 +62,11 @@ public class ServerGUI extends JFrame implements ActionListener {
         Object action = e.getSource();
         if (action.equals(BTN_START)) {
             if(serverCore == null){
-                System.out.println("Server started");
                 serverCore = new ServerCore();
                 serverCore.start();
             }
         } else if (action.equals(BTN_STOP)) {
             if(serverCore != null && serverCore.isAlive()){
-                System.out.println("Server stopped");
                 serverCore.stopServer();
                 serverCore = null;
             }
