@@ -14,32 +14,31 @@ public class ServerDownloadFileHandler extends SimpleChannelInboundHandler<FileN
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FileNameDto fileNameDto) throws Exception {
-            String fileName = fileNameDto.getFileName();
+        String fileName = fileNameDto.getFileName();
 
-            try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "r")) {
-                while (true) {
-                    FullFileDto fullFileDto = new FullFileDto();
-                    fullFileDto.setFileName(fileName);
-                    fullFileDto.setStartPosition(randomAccessFile.getFilePointer());
-                    int read = randomAccessFile.read(bigBuffer);
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "r")) {
+            while (true) {
+                FullFileDto fullFileDto = new FullFileDto();
+                fullFileDto.setFileName(fileName);
+                fullFileDto.setStartPosition(randomAccessFile.getFilePointer());
+                int read = randomAccessFile.read(bigBuffer);
 
-                    if (read == 0 || read == -1) {
-                        break;
-                    }
+                if (read == 0 || read == -1) {
+                    break;
+                }
 
-                    if (read < bigBuffer.length) {
-                        byte[] smallBuffer = new byte[read];
-                        System.arraycopy(bigBuffer, 0, smallBuffer, 0, smallBuffer.length);
-                        fullFileDto.setFileInBytes(smallBuffer);
-                        ctx.writeAndFlush(fullFileDto);
-                        break;
-                    } else {
-                        fullFileDto.setFileInBytes(bigBuffer);
-                        ctx.writeAndFlush(fullFileDto);
-                    }
+                if (read < bigBuffer.length) {
+                    byte[] smallBuffer = new byte[read];
+                    System.arraycopy(bigBuffer, 0, smallBuffer, 0, smallBuffer.length);
+                    fullFileDto.setFileInBytes(smallBuffer);
+                    ctx.writeAndFlush(fullFileDto);
+                    break;
+                } else {
+                    fullFileDto.setFileInBytes(bigBuffer);
+                    ctx.writeAndFlush(fullFileDto);
                 }
             }
-
+        }
     }
 
 }

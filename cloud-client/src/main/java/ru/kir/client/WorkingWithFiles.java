@@ -26,9 +26,6 @@ import static ru.kir.common.ParametersForFileTransfer.*;
 public class WorkingWithFiles {
     private byte[] bigBuffer = new byte[MAX_FRAME_LENGTHS];
 
-    /**
-     * Скачивание файла с сервера
-     */
     public void downloadFileFromServer(String host, int port, String pathDownloadFile) {
         NioEventLoopGroup workingGroup = new NioEventLoopGroup();
         try {
@@ -63,10 +60,6 @@ public class WorkingWithFiles {
             workingGroup.shutdownGracefully();
         }
     }
-
-    /**
-     * Передача файла на сервер
-     */
 
     public void uploadFileToServer(String host, int port, String pathUploadFile) {
         NioEventLoopGroup workingGroup = new NioEventLoopGroup();

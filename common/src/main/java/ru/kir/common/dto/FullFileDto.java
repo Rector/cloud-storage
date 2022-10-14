@@ -7,4 +7,5 @@ public class FullFileDto {
     private String fileName;
     private long startPosition;
     private byte[] fileInBytes;
+
 }

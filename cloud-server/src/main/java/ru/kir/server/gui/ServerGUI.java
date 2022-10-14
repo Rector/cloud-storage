@@ -16,15 +16,10 @@ public class ServerGUI extends JFrame implements ActionListener {
 
     private ServerCore serverCore;
 
-
     private final JButton BTN_START = new JButton("Start");
     private final JButton BTN_STOP = new JButton("Stop");
     private final JPanel PANEL = new JPanel(new GridLayout(1, 2));
     private final JTextArea LOG_AREA = new JTextArea();
-
-    /**
-     * Настраиваются параметры графического интерфейса сервера
-     */
 
     private ServerGUI() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -52,10 +47,6 @@ public class ServerGUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ServerGUI::new);
     }
-
-    /**
-     * Задаётся поведение сервера при нажатии на кнопки графического интерфейса
-     */
 
     @Override
     public void actionPerformed(ActionEvent e) {

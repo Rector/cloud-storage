@@ -15,4 +15,5 @@ public class ServerDownloadJsonEncoder extends MessageToMessageEncoder<FullFileD
         byte[] bytes = objectMapper.writeValueAsBytes(fullFileDto);
         out.add(bytes);
     }
+
 }

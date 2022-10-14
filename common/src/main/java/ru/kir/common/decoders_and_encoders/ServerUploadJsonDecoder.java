@@ -15,4 +15,5 @@ public class ServerUploadJsonDecoder extends MessageToMessageDecoder<byte[]> {
         FullFileDto fullFileDto = objectMapper.readValue(file, FullFileDto.class);
         out.add(fullFileDto);
     }
+
 }
