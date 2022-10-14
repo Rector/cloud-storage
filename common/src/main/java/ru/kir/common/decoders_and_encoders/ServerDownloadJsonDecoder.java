@@ -15,4 +15,5 @@ public class ServerDownloadJsonDecoder extends MessageToMessageDecoder<byte[]> {
         FileNameDto fileNameDto = objectMapper.readValue(file, FileNameDto.class);
         out.add(fileNameDto);
     }
+
 }

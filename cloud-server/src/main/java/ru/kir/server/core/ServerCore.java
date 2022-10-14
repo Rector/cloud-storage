@@ -26,23 +26,16 @@ import java.sql.*;
 import static ru.kir.common.ParametersForFileTransfer.*;
 
 public class ServerCore extends Thread {
-    private WorkWithDB workWithDB = new WorkWithDB();
-    private Statement statement;
-
     private NioEventLoopGroup bossGroup;
     private NioEventLoopGroup workingGroup;
 
     private final String HOST = "localhost";
     private final int PORT = 8800;
 
-
-    /**
-     * Создание директории каждому пользователю
-     */
-
     private void createDirectories() {
         try {
             Path path = null;
+            Statement statement = WorkWithDB.getStatement();
             ResultSet resultSet = statement.executeQuery("SELECT login_fld FROM users_tbl");
             while (resultSet.next()) {
                 path = Paths.get("./cloud-server/src/main/resources/client_files/" + resultSet.getString("login_fld").toLowerCase());
@@ -55,15 +48,9 @@ public class ServerCore extends Thread {
         }
     }
 
-    /**
-     * Устанавливается соединение с базой данных и сервер начинает "слушать" порт 8800 и ожидать загрузки или скачивания файла
-     */
-
     @Override
     public void run() {
-            if (!isInterrupted()) {
-
-            statement = workWithDB.getStatement();
+        if (!isInterrupted()) {
             createDirectories();
 
             try {
@@ -100,19 +87,13 @@ public class ServerCore extends Thread {
                 workingGroup.shutdownGracefully();
             }
         }
-
     }
-
-    /**
-     * Предполагается закрытие потоков и завершение соединения с базой данных
-     */
 
     public void stopServer() {
         if (isAlive()) {
             bossGroup.shutdownGracefully();
             workingGroup.shutdownGracefully();
-            workWithDB.closeConnectionDB();
-            statement = null;
+            WorkWithDB.closeConnectionDB();
             interrupt();
         }
     }

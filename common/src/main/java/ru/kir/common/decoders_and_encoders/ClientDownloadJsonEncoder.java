@@ -7,7 +7,6 @@ import ru.kir.common.dto.FileNameDto;
 
 import java.util.List;
 
-
 public class ClientDownloadJsonEncoder extends MessageToMessageEncoder<FileNameDto> {
     private ObjectMapper objectMapper = new ObjectMapper();
 

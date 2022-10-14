@@ -33,10 +33,6 @@ public class ClientGUI extends JFrame implements ActionListener {
     private final JButton BTN_DOWNLOAD_FILE = new JButton("Download file");
     private final JButton BTN_UPLOAD_FILE = new JButton("Upload file");
 
-    /**
-     * Настраивааются параметры графического интерфейса клиента
-     */
-
     private ClientGUI() {
         workingWithFiles = new WorkingWithFiles();
 
@@ -75,10 +71,6 @@ public class ClientGUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ClientGUI::new);
     }
-
-    /**
-     * Задаётся поведение клиента при нажатии на кнопки графического интерфейса
-     **/
 
     @Override
     public void actionPerformed(ActionEvent e) {
